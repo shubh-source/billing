@@ -1,0 +1,12 @@
+{
+  "name": "webbill-pro",
+  "version": "1.0.0",
+  "description": "Professional Website Invoicing & Billing Web App for UDVerse",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "author": "Shubh Katiyar <shubhkatiyar6513@gmail.com>",
+  "license": "MIT"
+}

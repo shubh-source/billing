@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="indigo">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebBill Pro | UDVerse - Website Invoicing & Billing</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">UDVerse</div>
+        <div class="brand-subtitle">WebBill Pro • Client Billing System</div>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Theme Switcher -->
+      <select id="themeSelect" class="btn btn-secondary btn-sm" style="width: auto; padding: 0.35rem 0.6rem; cursor: pointer;">
+        <option value="indigo">Theme: Modern Indigo</option>
+        <option value="slate">Theme: Deep Slate</option>
+        <option value="emerald">Theme: Emerald Tech</option>
+        <option value="crimson">Theme: Crimson Agency</option>
+        <option value="cyan">Theme: Cyan Digital</option>
+      </select>
+
+      <!-- History Modal Trigger -->
+      <button type="button" class="btn btn-secondary btn-sm" id="btnHistory" title="View Saved Invoices">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+        History
+      </button>
+
+      <!-- New Invoice Button -->
+      <button type="button" class="btn btn-secondary btn-sm" id="btnNewInvoice" title="Start a fresh bill">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        New Bill
+      </button>
+
+      <!-- Print / PDF Primary Button -->
+      <button type="button" class="btn btn-primary" id="btnPrint">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Print / Save PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile View Toggle -->
+  <div class="mobile-view-toggle">
+    <button type="button" class="tab-btn active" id="tabEdit">Edit Details</button>
+    <button type="button" class="tab-btn" id="tabPreview">Invoice Preview</button>
+  </div>
+
+  <!-- Main App Split Container -->
+  <div class="app-container">
+
+    <!-- LEFT: Configuration & Input Panel -->
+    <aside class="editor-panel">
+
+      <!-- SECTION 1: My Details (Developer / Agency) -->
+      <section class="form-section">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            My Details (Your Business)
+          </div>
+          <div style="display:flex; gap:0.4rem;">
+            <button type="button" class="btn btn-secondary btn-sm" id="btnResetMyDetails" title="Reset to defaults">Reset</button>
+            <button type="button" class="btn btn-primary btn-sm" id="btnSaveMyDetails" title="Save these details as default for future bills">Save as Default</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="logoFileInput">Company Logo (Optional PNG/JPEG)</label>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <input type="file" id="logoFileInput" accept="image/*" style="font-size:0.8rem; padding:0.35rem;">
+            <button type="button" class="btn btn-danger-outline btn-sm" id="btnRemoveLogo" style="display:none;">Remove</button>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="myBusinessName">Company / Agency Name</label>
+            <input type="text" id="myBusinessName" placeholder="UDVerse">
+          </div>
+          <div class="form-group">
+            <label for="myOwnerName">Your Name / Founder</label>
+            <input type="text" id="myOwnerName" placeholder="Shubh Katiyar">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="myTagline">Tagline / Subheading</label>
+          <input type="text" id="myTagline" placeholder="Web Design & Full-Stack Development">
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="myEmail">Email Address</label>
+            <input type="email" id="myEmail" placeholder="shubhkatiyar6513@gmail.com">
+          </div>
+          <div class="form-group">
+            <label for="myPhone">Phone / Contact</label>
+            <input type="text" id="myPhone" placeholder="9451560978">
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="myWebsite">Website URL (Optional)</label>
+            <input type="text" id="myWebsite" placeholder="Leave blank if none">
+          </div>
+          <div class="form-group">
+            <label for="myTaxId">Tax ID / GSTIN (Optional)</label>
+            <input type="text" id="myTaxId" placeholder="Optional">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="myAddress">Business Address / City</label>
+          <input type="text" id="myAddress" placeholder="India">
+        </div>
+
+        <!-- Payment & Bank Accounts -->
+        <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed var(--border);">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:0.5rem; letter-spacing:0.04em;">
+            Payment & Bank Details (Optional)
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="myUpiId">UPI ID (Optional - leave blank to hide)</label>
+              <input type="text" id="myUpiId" placeholder="Leave blank to hide QR code">
+            </div>
+            <div class="form-group">
+              <label for="myBankName">Bank Name</label>
+              <input type="text" id="myBankName" placeholder="Bank Transfer / SBI / HDFC">
+            </div>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="myAccountNo">Account Number</label>
+              <input type="text" id="myAccountNo" placeholder="50200012345678">
+            </div>
+            <div class="form-group">
+              <label for="myIfscCode">IFSC Code</label>
+              <input type="text" id="myIfscCode" placeholder="HDFC0001234">
+            </div>
+            <div class="form-group">
+              <label for="myAccountHolder">A/C Holder Name</label>
+              <input type="text" id="myAccountHolder" placeholder="InShort Web Solution">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Client & Project Information -->
+      <section class="form-section">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            Client & Website Details
+          </div>
+          <span class="badge badge-indigo">Client Info</span>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="clientName">Client Contact Name</label>
+            <input type="text" id="clientName" placeholder="e.g. Alex Morgan">
+          </div>
+          <div class="form-group">
+            <label for="clientCompany">Company / Business Name</label>
+            <input type="text" id="clientCompany" placeholder="e.g. Apex Tech Enterprises">
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="clientEmail">Client Email</label>
+            <input type="email" id="clientEmail" placeholder="billing@apextech.com">
+          </div>
+          <div class="form-group">
+            <label for="clientPhone">Client Phone</label>
+            <input type="text" id="clientPhone" placeholder="+91 91234 56789">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="clientAddress">Billing Address</label>
+          <input type="text" id="clientAddress" placeholder="Client street address, City, Country">
+        </div>
+
+        <div class="form-grid-2" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed var(--border);">
+          <div class="form-group">
+            <label for="clientProjectName">Project Title / Scope</label>
+            <input type="text" id="clientProjectName" placeholder="e.g. E-Commerce Redesign">
+          </div>
+          <div class="form-group">
+            <label for="clientProjectDomain">Website Domain (Target URL)</label>
+            <input type="text" id="clientProjectDomain" placeholder="e.g. www.apextech.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="clientTaxId">Client GSTIN / Tax ID (Optional)</label>
+          <input type="text" id="clientTaxId" placeholder="e.g. 29ABCDE1234F2Z5">
+        </div>
+      </section>
+
+      <!-- SECTION 3: Invoice Metadata & Currency -->
+      <section class="form-section">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Invoice Details
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="invoiceNumber">Invoice Number</label>
+            <input type="text" id="invoiceNumber" placeholder="INV-2026-001">
+          </div>
+          <div class="form-group">
+            <label for="invoiceStatus">Payment Status</label>
+            <select id="invoiceStatus">
+              <option value="Pending">Pending Payment</option>
+              <option value="Partially Paid">Partially Paid (Advance Received)</option>
+              <option value="Paid">Fully Paid</option>
+              <option value="Overdue">Overdue</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label for="issueDate">Issue Date</label>
+            <input type="date" id="issueDate">
+          </div>
+          <div class="form-group">
+            <label for="dueDate">Due Date</label>
+            <input type="date" id="dueDate">
+          </div>
+          <div class="form-group">
+            <label for="currencySelect">Currency</label>
+            <select id="currencySelect">
+              <option value="INR">INR (₹ - Indian Rupee)</option>
+              <option value="USD">USD ($ - US Dollar)</option>
+              <option value="EUR">EUR (€ - Euro)</option>
+              <option value="GBP">GBP (£ - British Pound)</option>
+              <option value="AED">AED (Dirham)</option>
+              <option value="CAD">CAD (Canadian $)</option>
+              <option value="AUD">AUD (Australian $)</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Website Deliverables & Pricing -->
+      <section class="form-section">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            Website Services & Scope of Work
+          </div>
+        </div>
+
+        <!-- Quick Website Packages Inserter -->
+        <label style="margin-bottom: 0.4rem; display: block;">⚡ Quick Add Web Packages:</label>
+        <div class="preset-chips-container" id="presetChips">
+          <!-- Injected dynamically via app.js -->
+        </div>
+
+        <!-- Items Table Container -->
+        <div class="items-list" id="itemsListContainer">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-sm" id="btnAddItem" style="width: 100%;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Add Custom Service Item
+        </button>
+      </section>
+
+      <!-- SECTION 5: Taxes, Discounts & Advance -->
+      <section class="form-section">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            Taxes, Discounts & Advance
+          </div>
+        </div>
+
+        <!-- Tax settings -->
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="taxModeSelect">Tax / GST Type</label>
+            <select id="taxModeSelect">
+              <option value="cgst_sgst">CGST + SGST (Intra-state GST)</option>
+              <option value="igst">IGST (Inter-state GST)</option>
+              <option value="flat_vat">VAT / Flat Sales Tax</option>
+              <option value="none">No Tax / 0% Tax</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="taxRateInput">Tax Rate (%)</label>
+            <input type="number" id="taxRateInput" value="18" min="0" max="100" step="0.5">
+          </div>
+        </div>
+
+        <!-- Discount & Advance Payment -->
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label for="discountTypeSelect">Discount Type</label>
+            <select id="discountTypeSelect">
+              <option value="fixed">Flat Amount</option>
+              <option value="percent">Percentage (%)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="discountValueInput">Discount Value</label>
+            <input type="number" id="discountValueInput" value="0" min="0" step="any">
+          </div>
+          <div class="form-group">
+            <label for="advancePaidInput">Advance / Deposit Paid</label>
+            <input type="number" id="advancePaidInput" value="0" min="0" step="any">
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: Terms & Notes -->
+      <section class="form-section">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            Terms & Client Notes
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="invoiceTerms">Terms & Conditions</label>
+          <textarea id="invoiceTerms" rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="invoiceNotes">Client Thank You Note</label>
+          <input type="text" id="invoiceNotes">
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- RIGHT: Live WYSIWYG A4 Invoice Sheet Preview -->
+    <main class="preview-panel">
+
+      <!-- Action Toolbar -->
+      <div class="preview-toolbar">
+        <div class="toolbar-group">
+          <button type="button" class="btn btn-secondary btn-sm" id="btnWhatsApp">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2.2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+            Send WhatsApp
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnCopySummary" title="Copy text summary for email/messages">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            Copy Summary
+          </button>
+        </div>
+
+        <div class="toolbar-group">
+          <button type="button" class="btn btn-secondary btn-sm" id="btnSaveInvoice" title="Save this invoice to history">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            Save to History
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable A4 Sheet -->
+      <div class="invoice-sheet-wrapper">
+        <article class="invoice-sheet" id="invoicePrintTarget">
+          
+          <!-- Top Color Accent Bar -->
+          <div class="inv-header-accent-bar"></div>
+
+          <!-- Invoice Header -->
+          <header class="inv-header">
+            <!-- Business Info (My Details) -->
+            <div class="inv-brand-box">
+              <div class="inv-logo-badge">
+                <div class="inv-logo-icon" id="invPreviewLogoIcon">UD</div>
+                <img id="invPreviewLogoImg" src="" alt="Company Logo" style="display:none; max-height:55px; max-width:150px; object-fit:contain; border-radius:4px;" />
+                <div>
+                  <div class="inv-company-name" id="invPreviewCompanyName">UDVerse</div>
+                  <div class="inv-company-tagline" id="invPreviewTagline">Web Design & Full-Stack Development</div>
+                </div>
+              </div>
+              <div class="inv-company-contact">
+                <div id="invPreviewOwner" style="font-weight:600; color:var(--text-main);">Shubh Katiyar</div>
+                <div><span id="invPreviewEmail">shubhkatiyar6513@gmail.com</span> • <span id="invPreviewPhone">9451560978</span></div>
+                <div id="invPreviewWebsiteRow" style="display:none;"><span id="invPreviewWebsite"></span></div>
+                <div id="invPreviewTaxId" style="font-family:var(--font-mono); font-size:0.75rem; margin-top:2px; display:none;"></div>
+              </div>
+            </div>
+
+            <!-- Invoice Meta Block -->
+            <div class="inv-title-box">
+              <div class="inv-type-title">INVOICE</div>
+              <div class="inv-meta-grid">
+                <div class="inv-meta-label">Invoice No:</div>
+                <div class="inv-meta-val" id="invPreviewNumber">INV-2026-001</div>
+
+                <div class="inv-meta-label">Issue Date:</div>
+                <div class="inv-meta-val" id="invPreviewDate">03 Nov 2026</div>
+
+                <div class="inv-meta-label">Due Date:</div>
+                <div class="inv-meta-val" id="invPreviewDueDate">17 Nov 2026</div>
+              </div>
+              <div class="inv-status-pill status-pending" id="invPreviewStatus">Pending</div>
+            </div>
+          </header>
+
+          <!-- Billed By / Billed To Row -->
+          <div class="inv-addresses-row">
+            <div class="address-box">
+              <div class="address-box-label">Billed By:</div>
+              <div class="address-box-name" id="invPreviewBilledByName">UDVerse</div>
+              <div class="address-box-detail" id="invPreviewBilledByDetail">
+                Web Design & Full-Stack Development<br>
+                Email: shubhkatiyar6513@gmail.com<br>
+                Phone: 9451560978
+              </div>
+            </div>
+
+            <div class="address-box">
+              <div class="address-box-label">Billed To (Client):</div>
+              <div class="address-box-name" id="invPreviewClientName">Alex Morgan</div>
+              <div class="address-box-detail">
+                <div id="invPreviewClientCompany" style="font-weight: 600; color:var(--text-main);">Apex Tech Enterprises</div>
+                <div id="invPreviewClientEmail">Email: billing@apextech.com</div>
+                <div id="invPreviewClientPhone">Phone: +91 91234 56789</div>
+                <div id="invPreviewClientAddress">Tech City, India</div>
+                <div id="invPreviewClientTaxId" style="font-family:var(--font-mono); font-size:0.75rem;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Website Project & Domain Badge -->
+          <div class="inv-project-badge" id="invPreviewProjectBanner">
+            <div>
+              <span style="color:var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight:700;">Project Scope: </span>
+              <span class="project-badge-name" id="invPreviewProjectName">Corporate Portal & Client Portal Redesign</span>
+            </div>
+            <div class="project-badge-domain" id="invPreviewProjectDomain">🌐 www.apextech.com</div>
+          </div>
+
+          <!-- Services / Deliverables Table -->
+          <div class="inv-table-wrapper">
+            <table class="inv-table">
+              <thead>
+                <tr>
+                  <th style="width: 30px;">#</th>
+                  <th>Service & Deliverables Description</th>
+                  <th style="text-align: center; width: 100px;">Category</th>
+                  <th style="text-align: center; width: 60px;">Qty</th>
+                  <th style="text-align: right; width: 120px;">Rate</th>
+                  <th style="text-align: right; width: 120px;">Amount</th>
+                </tr>
+              </thead>
+              <tbody id="invPreviewTableBody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Bottom Section: Payment Information & Totals Breakdown -->
+          <div class="inv-bottom-section">
+            
+            <!-- Left: Payment Options & Optional QR -->
+            <div class="payment-instructions-box" id="paymentInstructionsBox">
+              <div class="pay-header">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                Payment Details
+              </div>
+              <div class="pay-content-grid" id="payContentGrid">
+                <!-- Real-time UPI QR Canvas (Shown only when UPI ID is entered) -->
+                <canvas id="invPaymentQR" class="pay-qr-canvas" width="100" height="100" title="Scan to pay via UPI" style="display:none;"></canvas>
+                
+                <div class="pay-details-list">
+                  <div id="invPreviewUpiRow" style="display:none;"><strong>UPI ID:</strong> <span id="invPreviewUpiId" style="font-family:var(--font-mono); color:var(--inv-primary);"></span></div>
+                  <div id="invPreviewBankRow"><strong>Bank:</strong> <span id="invPreviewBankName">Bank Transfer</span></div>
+                  <div id="invPreviewAccountRow" style="display:none;"><strong>A/C No:</strong> <span id="invPreviewAccountNo" style="font-family:var(--font-mono);">-</span></div>
+                  <div id="invPreviewIfscRow" style="display:none;"><strong>IFSC:</strong> <span id="invPreviewIfsc" style="font-family:var(--font-mono);">-</span></div>
+                  <div id="invPreviewHolderRow"><strong>Beneficiary:</strong> <span id="invPreviewAccountHolder">UDVerse</span></div>
+                  <div id="invPreviewUpiNote" style="font-size:0.7rem; color:var(--text-light); margin-top:2px; display:none;">Scan QR with PhonePe, GPay, Paytm or BHIM</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Financial Summary Totals Card -->
+            <div class="inv-totals-box">
+              <div class="total-row">
+                <span>Subtotal:</span>
+                <span class="strong" id="invPreviewSubtotal">₹0.00</span>
+              </div>
+              
+              <div class="total-row" id="invPreviewDiscountRow" style="display:none; color: var(--danger);">
+                <span>Discount:</span>
+                <span class="strong" id="invPreviewDiscountVal">-₹0.00</span>
+              </div>
+
+              <!-- Taxes -->
+              <div class="total-row" id="invPreviewCgstRow" style="display:none;">
+                <span id="invPreviewCgstLabel">CGST (9%):</span>
+                <span id="invPreviewCgstVal">+₹0.00</span>
+              </div>
+
+              <div class="total-row" id="invPreviewSgstRow" style="display:none;">
+                <span id="invPreviewSgstLabel">SGST (9%):</span>
+                <span id="invPreviewSgstVal">+₹0.00</span>
+              </div>
+
+              <div class="total-row" id="invPreviewIgstRow" style="display:none;">
+                <span id="invPreviewIgstLabel">IGST (18%):</span>
+                <span id="invPreviewIgstVal">+₹0.00</span>
+              </div>
+
+              <div class="total-row" id="invPreviewFlatVatRow" style="display:none;">
+                <span id="invPreviewFlatVatLabel">Tax / VAT:</span>
+                <span id="invPreviewFlatVatVal">+₹0.00</span>
+              </div>
+
+              <!-- Grand Total -->
+              <div class="total-row grand-total">
+                <span>Total Amount:</span>
+                <span id="invPreviewGrandTotal">₹0.00</span>
+              </div>
+
+              <!-- Advance Paid -->
+              <div class="total-row" id="invPreviewAdvanceRow" style="display:none; color: var(--success);">
+                <span>Advance Paid:</span>
+                <span class="strong" id="invPreviewAdvanceVal">-₹0.00</span>
+              </div>
+
+              <!-- Balance Due -->
+              <div class="total-row balance-due">
+                <span>Balance Due:</span>
+                <span id="invPreviewBalanceDue">₹0.00</span>
+              </div>
+
+              <!-- Amount In Words -->
+              <div class="amount-in-words-box" id="invPreviewAmountWords">
+                Amount in words: Zero Only
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Footer: Terms & Signature -->
+          <footer class="inv-footer">
+            <div>
+              <div class="terms-title">Terms & Project Deliverables:</div>
+              <div class="terms-body" id="invPreviewTerms"></div>
+              <div style="margin-top: 0.6rem; font-style: italic; color: var(--inv-primary);" id="invPreviewNotes"></div>
+            </div>
+
+            <div class="signature-box">
+              <div class="signature-line"></div>
+              <div class="signatory-name" id="invPreviewSignatory">Shubh Katiyar</div>
+              <div class="signatory-title">Authorized Signatory • UDVerse</div>
+            </div>
+          </footer>
+
+        </article>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- History & Saved Invoices Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Saved Invoices History</div>
+        <button type="button" class="btn btn-secondary btn-sm" id="modalCloseBtn" style="padding: 0.25rem 0.5rem;">✕</button>
+      </div>
+      <div class="modal-body" id="historyListContainer">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('modalOverlay').classList.remove('active');">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- QR Code Generator & Main Logic -->
+  <script src="qrcode.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
